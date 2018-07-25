@@ -2,7 +2,7 @@ const fs = require('fs');
 const request = require('request');
 const TelegramBot = require('node-telegram-bot-api');
 
-const token =  '580175305:AAFpPnRk_jw7l043BFJEaNsCt7pA4-9N5yw';
+const token =  '672806907:AAHb4qa0mtvcjL_CTZT-_U9K7SA5VppUYn0';
 
 const bot = new TelegramBot(token, {polling: true});
 
@@ -53,7 +53,7 @@ bot.on('location', (msg) => {
     let minDistance = points[0].distanceToMe(location);
     for(let i = 0; i < points.length; i++) {
       let currentDisntance = points[i].distanceToMe(location);
-      if(currentDisntance < minDistance && fullInfoNetwork[i].categories.includes(category)){
+      if(fullInfoNetwork[i].categories.includes(category) && currentDisntance < minDistance){
           minDistance = currentDisntance;
           nearestPoint = points[i];
           minIndex = i;
