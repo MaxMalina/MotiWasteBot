@@ -27,10 +27,17 @@ var users = [];
 bot.on('location', (msg) => {
     const chatId = msg.chat.id;
 
-    var category;
+    var categoryId;
     for(let i = 0; i<users.length; i++){
       if(users[i].chatId == chatId){
-        category = users[i].categoryId;
+        categoryId = users[i].categoryId;
+      }
+    }
+
+    var category;
+    for(let i = 0; i < categoryArrNetwork.length; i++) {
+      if(categoryArrNetwork[i]._id == categoryId) {
+        category = categoryArrNetwork[i].type;
       }
     }
 
