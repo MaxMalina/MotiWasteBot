@@ -96,21 +96,23 @@ bot.on('callback_query', function (msg) {
   } else {
     for(let i = 0; i < categoryArrNetwork.length; i++) {
       if(msg.data == categoryArrNetwork[i]._id){
-        bot.sendMessage(msg.message.chat.id, categoryArrNetwork[i].description);
-        bot.sendMessage(msg.message.chat.id, "Вiдправ менi, будь-ласка, свою геолокацiю")
-
         let added = false;
-        for(let j = 0; j<users.length; j++) {
-          if(users[i].chatId == msg.message.chat.id){
-            users[i].categoryId = categoryArrNetwork[i]._id;
-            added = true;
+        if(typeof users !== 'undefined' && users.length > 0){
+          for(let j = 0; j<users.length; j++) {
+            if(users[j].chatId == msg.message.chat.id){
+              users[j].categoryId = categoryArrNetwork[i]._id;
+              added = true;
+            }
           }
         }
 
         if(!added) {
           users.push(new User(msg.message.chat.id, msg.data))
-          added = false;
+          added = true;
         }
+
+        bot.sendMessage(msg.message.chat.id, categoryArrNetwork[i].description);
+        bot.sendMessage(msg.message.chat.id, "Вiдправ менi, будь-ласка, свою геолокацiю")
       }
     }
   }
