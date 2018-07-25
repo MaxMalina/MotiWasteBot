@@ -1,9 +1,10 @@
 const fs = require('fs');
 const request = require('request');
 const TelegramBot = require('node-telegram-bot-api');
-const config = require('./config');
 
-const bot = new TelegramBot(config.token, {polling: true});
+const token =  '580175305:AAFpPnRk_jw7l043BFJEaNsCt7pA4-9N5yw';
+
+const bot = new TelegramBot(token, {polling: true});
 
 var categoryArrNetwork;
 const categoryArrFile = JSON.parse(fs.readFileSync('categories.json', 'utf8'));
