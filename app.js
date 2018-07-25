@@ -1,19 +1,34 @@
 const fs = require('fs');
-
+const request = require('request');
 const TelegramBot = require('node-telegram-bot-api');
+
 const token = '580175305:AAFpPnRk_jw7l043BFJEaNsCt7pA4-9N5yw';
 const bot = new TelegramBot(token, {polling: true});
 
-const categoryArr = JSON.parse(fs.readFileSync('categories.json', 'utf8'));
-const fullInfo = JSON.parse(fs.readFileSync('full_info.json', 'utf8'));
+var categoryArrNetwork;
+const categoryArrFile = JSON.parse(fs.readFileSync('categories.json', 'utf8'));
+
+request('https://recyclemap.org/api/categories', { json: true }, (err, res, body) => {
+  if (err) { return console.log(err); }
+  categoryArrNetwork = body;
+});
+
+
+var fullInfoNetwork;
+const fullInfoFile = JSON.parse(fs.readFileSync('full_info.json', 'utf8'));
+
+request('https://recyclemap.org/api/places', { json: true }, (err, res, body) => {
+  if (err) { return console.log(err); }
+  fullInfoNetwork = body;
+});
 
 bot.on('location', (msg) => {
     const chatId = msg.chat.id;
 
     var location = new Location(msg.location.latitude, msg.location.longitude);
     var points = []
-    for(let i = 0; i < fullInfo.length; i++){
-      var jsonContent = fullInfo[i];
+    for(let i = 0; i < fullInfoNetwork.length; i++){
+      var jsonContent = fullInfoNetwork[i];
       points.push(new Location(jsonContent.loc.coordinates[1], jsonContent.loc.coordinates[0]))
     }
 
@@ -29,7 +44,7 @@ bot.on('location', (msg) => {
       }
     }
 
-    bot.sendMessage(chatId, fullInfo[minIndex].name + '\n' + fullInfo[minIndex].address + '\n' + fullInfo[minIndex].workingHours);
+    bot.sendMessage(chatId, fullInfoNetwork[minIndex].name + '\n' + fullInfoNetwork[minIndex].address + '\n' + fullInfoNetwork[minIndex].workingHours);
     bot.sendLocation(chatId, nearestPoint.latitude, nearestPoint.longitude);
     bot.sendMessage(chatId, Math.round(minDistance) + ' метрiв');
 });
@@ -51,8 +66,8 @@ bot.on('callback_query', function (msg) {
   if(msg.data === '1') {
     let result = []
 
-    for(let i = 0; i < categoryArr.length; i++) {
-      result.push([{ text : categoryArr[i].name, callback_data : categoryArr[i]._id}])
+    for(let i = 0; i < categoryArrNetwork.length; i++) {
+      result.push([{ text : categoryArrNetwork[i].name, callback_data : categoryArrNetwork[i]._id}])
     }
     var options = {
       reply_markup: JSON.stringify({
@@ -63,9 +78,9 @@ bot.on('callback_query', function (msg) {
   } if(msg.data === '2') {
     bot.sendMessage(msg.message.chat.id, "Вiдправ менi, фотографiю QR-coda iз точки переробки")  
   } else {
-    for(let i = 0; i < categoryArr.length; i++) {
-      if(msg.data == categoryArr[i]._id){
-        bot.sendMessage(msg.message.chat.id, categoryArr[i].description);
+    for(let i = 0; i < categoryArrNetwork.length; i++) {
+      if(msg.data == categoryArrNetwork[i]._id){
+        bot.sendMessage(msg.message.chat.id, categoryArrNetwork[i].description);
         bot.sendMessage(msg.message.chat.id, "Вiдправ менi, будь-ласка, свою геолокацiю")
       }
     }
