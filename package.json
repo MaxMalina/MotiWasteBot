@@ -1,6 +1,13 @@
 {
   "requires": true,
   "lockfileVersion": 1,
+  "name": "MotiwasteBot",
+  "version": "0.0.1",
+  "description": "...",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
   "dependencies": {
     "ajv": {
       "version": "5.5.2",
