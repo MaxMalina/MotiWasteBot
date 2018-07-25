@@ -13,7 +13,6 @@ request('https://recyclemap.org/api/categories', { json: true }, (err, res, body
   categoryArrNetwork = body;
 });
 
-
 var fullInfoNetwork;
 const fullInfoFile = JSON.parse(fs.readFileSync('full_info.json', 'utf8'));
 
@@ -22,8 +21,17 @@ request('https://recyclemap.org/api/places', { json: true }, (err, res, body) =>
   fullInfoNetwork = body;
 });
 
+var users = [];
+
 bot.on('location', (msg) => {
     const chatId = msg.chat.id;
+
+    var category;
+    for(let i = 0; i<users.length; i++){
+      if(users[i].chatId == chatId){
+        category = users[i].categoryId;
+      }
+    }
 
     var location = new Location(msg.location.latitude, msg.location.longitude);
     var points = []
@@ -37,14 +45,14 @@ bot.on('location', (msg) => {
     let minDistance = points[0].distanceToMe(location);
     for(let i = 0; i < points.length; i++) {
       let currentDisntance = points[i].distanceToMe(location);
-      if(currentDisntance < minDistance){
+      if(currentDisntance < minDistance && fullInfoNetwork[i].categories.includes(category)){
           minDistance = currentDisntance;
           nearestPoint = points[i];
           minIndex = i;
       }
     }
 
-    bot.sendMessage(chatId, fullInfoNetwork[minIndex].name + '\n' + fullInfoNetwork[minIndex].address + '\n' + fullInfoNetwork[minIndex].workingHours);
+    bot.sendMessage(chatId, fullInfoNetwork[minIndex].name + '\n' + fullInfoNetwork[minIndex].address + '\n' + fullInfoNetwork[minIndex].workingHours + '\n' + fullInfoNetwork[minIndex].categories);
     bot.sendLocation(chatId, nearestPoint.latitude, nearestPoint.longitude);
     bot.sendMessage(chatId, Math.round(minDistance) + ' метрiв');
 });
@@ -82,10 +90,30 @@ bot.on('callback_query', function (msg) {
       if(msg.data == categoryArrNetwork[i]._id){
         bot.sendMessage(msg.message.chat.id, categoryArrNetwork[i].description);
         bot.sendMessage(msg.message.chat.id, "Вiдправ менi, будь-ласка, свою геолокацiю")
+
+        let added = false;
+        for(let j = 0; j<users.length; j++) {
+          if(users[i].chatId == msg.message.chat.id){
+            users[i].categoryId = categoryArrNetwork[i]._id;
+            added = true;
+          }
+        }
+
+        if(!added) {
+          users.push(new User(msg.message.chat.id, msg.data))
+          added = false;
+        }
       }
     }
   }
 });
+
+class User {
+  constructor(chatId, categoryId) {
+    this.chatId = chatId;
+    this.categoryId = categoryId;
+  }
+}
 
 bot.on('photo', (msg) => {
   const chatId = msg.chat.id;
