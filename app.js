@@ -60,7 +60,7 @@ bot.on('location', (msg) => {
       }
     }
 
-    bot.sendMessage(chatId, fullInfoNetwork[minIndex].name + '\n' + fullInfoNetwork[minIndex].address + '\n' + fullInfoNetwork[minIndex].workingHours + '\n' + fullInfoNetwork[minIndex].categories);
+    bot.sendMessage(chatId, fullInfoNetwork[minIndex].name + '\n' + fullInfoNetwork[minIndex].address + '\n' + fullInfoNetwork[minIndex].workingHours + '\n*' + fullInfoNetwork[minIndex].categories + '*', {parse_mode: 'Markdown'});
     bot.sendLocation(chatId, nearestPoint.latitude, nearestPoint.longitude);
     bot.sendMessage(chatId, Math.round(minDistance) + ' метрiв');
 });
@@ -70,12 +70,14 @@ bot.onText(/\/start/, (msg) => {
   var options = {
     reply_markup: JSON.stringify({
       inline_keyboard: [
-        [{ text: 'Знайти найближчий пункт переробки', callback_data: '1' }],
-        [{ text: 'Вiдсканувати QR-код', callback_data: '2' }]
+        [{ text: 'Найближчий пункт прийому вторсировини', callback_data: '1' }],
+        [{ text: 'Як підготувати сміття до утилізації', callback_data: '2' }],
+        [{ text: 'Додати пункт прийому вторсировини', callback_data: '3' }],
+        [{ text: 'Допомогти проекту', callback_data: '4' }]
       ]
     })
   };
-  bot.sendMessage(msg.chat.id, 'Привiт! Я бот, який допоможе тобi долучитися до вирiшення проблем переробки смiття', options);
+  bot.sendMessage(msg.chat.id, 'Привiт! Я бот, котрий допоможе тобi долучитися до вирiшення проблем переробки смiття!', options);
 });
 
 bot.on('callback_query', function (msg) {
