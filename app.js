@@ -80,21 +80,16 @@ bot.onText(/\/start/, (msg) => {
   bot.sendMessage(msg.chat.id, 'Привiт! Я бот, котрий допоможе тобi долучитися до вирiшення проблем переробки смiття!', options);
 });
 
-bot.on('callback_query', function (msg) {
-  if(msg.data === '1') {
-    let result = []
+bot.onText(/\/find/, (msg) => { chooseCategory(msg.chat.id); });
 
-    for(let i = 0; i < categoryArrNetwork.length; i++) {
-      result.push([{ text : categoryArrNetwork[i].name, callback_data : categoryArrNetwork[i]._id}])
-    }
-    var options = {
-      reply_markup: JSON.stringify({
-        inline_keyboard : result 
-      })
-    };
-  bot.sendMessage(msg.message.chat.id, 'Який тип смiття хочеш здати?', options);
-  } if(msg.data === '2') {
-    bot.sendMessage(msg.message.chat.id, "Вiдправ менi, фотографiю QR-coda iз точки переробки")  
+bot.on('callback_query', function (msg) {
+  if(msg.data === '1') { chooseCategory(msg.message.chat.id); } 
+  if(msg.data === '2') { chooseCategory(msg.message.chat.id); }
+  if(msg.data === '3') { 
+    bot.sendMessage(msg.message.chat.id, 'Щоб додати пункт прийому вторинної сировини, заповни цю форму: bit.ly/2NPuvpT');  
+  } 
+  if(msg.data === '4') { 
+    bot.sendMessage(msg.message.chat.id, 'Ти можеш на написати нам пошту team.motiwaste@gmail.com або у телеграмі @yehorkuzmin');
   } else {
     for(let i = 0; i < categoryArrNetwork.length; i++) {
       if(msg.data == categoryArrNetwork[i]._id){
@@ -167,4 +162,17 @@ class Location {
     distanceToMe(p2) {
       return getDistance(this, p2)
     }
+}
+
+function chooseCategory(chatId) {
+  let result = [];
+  for (let i = 0; i < categoryArrNetwork.length; i++) {
+    result.push([{ text: categoryArrNetwork[i].name, callback_data: categoryArrNetwork[i]._id }]);
+  }
+  var options = {
+    reply_markup: JSON.stringify({
+      inline_keyboard: result
+    })
+  };
+  bot.sendMessage(chatId, 'Який тип смiття хочеш здати?', options);
 }
