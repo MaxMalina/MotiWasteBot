@@ -1,13 +1,14 @@
-const fs = require('fs');
 const request = require('request');
 const TelegramBot = require('node-telegram-bot-api');
 
-const token =  '672806907:AAHb4qa0mtvcjL_CTZT-_U9K7SA5VppUYn0';
+var ConfigBuilder = require('./utils/config-builder');
+var config = ConfigBuilder.build('development');
+
+const token = config.telegramToken;
 
 const bot = new TelegramBot(token, {polling: true});
 
 var categoryArrNetwork;
-const categoryArrFile = JSON.parse(fs.readFileSync('categories.json', 'utf8'));
 
 request('https://recyclemap.org/api/categories', { json: true }, (err, res, body) => {
   if (err) { return console.log(err); }
@@ -15,7 +16,6 @@ request('https://recyclemap.org/api/categories', { json: true }, (err, res, body
 });
 
 var fullInfoNetwork;
-const fullInfoFile = JSON.parse(fs.readFileSync('full_info.json', 'utf8'));
 
 request('https://recyclemap.org/api/places', { json: true }, (err, res, body) => {
   if (err) { return console.log(err); }

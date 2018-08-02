@@ -1,0 +1,10 @@
+{
+    "production": {
+      "telegramToken": "",
+      "connectionString": ""
+    },
+    "development": {
+      "telegramToken": "",
+      "connectionString": ""
+    }
+  }
