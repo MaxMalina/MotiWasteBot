@@ -75,5 +75,5 @@ typings/
 # Visual studio code directory
 .vscode
 
-#test
-#test
+# Package lock
+package-lock.json

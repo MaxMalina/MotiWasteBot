@@ -1,22 +1,28 @@
 const request = require('request');
+var mongoose = require('mongoose');
+
 const TelegramBot = require('node-telegram-bot-api');
 
 var ConfigBuilder = require('./utils/config-builder');
 var config = ConfigBuilder.build('development');
 
 const token = config.telegramToken;
+mongoose.connect(config.connectionString, { useMongoClient: true });
+var LocationModel = require('./models/location-model');
+
+LocationModel.find({}, function(err, users) {
+  console.log(users);
+});
 
 const bot = new TelegramBot(token, {polling: true});
 
 var categoryArrNetwork;
-
 request('https://recyclemap.org/api/categories', { json: true }, (err, res, body) => {
   if (err) { return console.log(err); }
   categoryArrNetwork = body;
 });
 
 var fullInfoNetwork;
-
 request('https://recyclemap.org/api/places', { json: true }, (err, res, body) => {
   if (err) { return console.log(err); }
   fullInfoNetwork = body;
