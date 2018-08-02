@@ -8,19 +8,44 @@ var config = ConfigBuilder.build('development');
 
 const token = config.telegramToken;
 mongoose.connect(config.connectionString, { useMongoClient: true });
-var LocationModel = require('./models/location-model');
 
-LocationModel.find({}, function(err, users) {
-  console.log(users);
+var LocationService = require('./services/location-service');
+
+LocationService.getAll(function (err, locations) {
+  if (err) {
+    console.log(err.message)
+  }
+
+  console.log(locations);
+});
+
+LocationService.getByCategories("pet", function (err, locations) {
+  if (err) {
+    console.log(err.message)
+  }
+
+  console.log(locations);
+});
+
+
+var categoryArrNetwork = [];
+var CategoryService = require('./services/category-service');
+CategoryService.getAll(function (err, categories) {
+  if (err) {
+    console.log(err.message)
+  }
+  
+  categories.forEach(element => {
+    categoryArrNetwork.push(element._doc);
+  });
 });
 
 const bot = new TelegramBot(token, {polling: true});
 
-var categoryArrNetwork;
-request('https://recyclemap.org/api/categories', { json: true }, (err, res, body) => {
-  if (err) { return console.log(err); }
-  categoryArrNetwork = body;
-});
+//request('https://recyclemap.org/api/categories', { json: true }, (err, res, body) => {
+//  if (err) { return console.log(err); }
+//  categoryArrNetwork = body;
+//});
 
 var fullInfoNetwork;
 request('https://recyclemap.org/api/places', { json: true }, (err, res, body) => {
@@ -40,10 +65,10 @@ bot.on('location', (msg) => {
       }
     }
 
-    var category;
+    var categoryType;
     for(let i = 0; i < categoryArrNetwork.length; i++) {
       if(categoryArrNetwork[i]._id == categoryId) {
-        category = categoryArrNetwork[i].type;
+        categoryType = categoryArrNetwork[i].type;
       }
     }
 
@@ -59,7 +84,7 @@ bot.on('location', (msg) => {
     let minDistance = points[0].distanceToMe(location);
     for(let i = 0; i < points.length; i++) {
       let currentDisntance = points[i].distanceToMe(location);
-      if(fullInfoNetwork[i].categories.includes(category) && currentDisntance < minDistance){
+      if(fullInfoNetwork[i].categories.includes(categoryType) && currentDisntance < minDistance){
           minDistance = currentDisntance;
           nearestPoint = points[i];
           minIndex = i;
