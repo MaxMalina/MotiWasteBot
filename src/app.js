@@ -56,7 +56,7 @@ request('https://recyclemap.org/api/places', { json: true }, (err, res, body) =>
 var users = [];
 
 bot.on('location', (msg) => {
-    const chatId = msg.chat.id;
+    const chatId = msg.from.id;
 
     var categoryId;
     for(let i = 0; i<users.length; i++){
@@ -97,7 +97,7 @@ bot.on('location', (msg) => {
 });
 
 bot.onText(/\/start/, (msg) => {
-  const chatId = msg.chat.id;
+  const chatId = msg.from.id;
   var options = {
     reply_markup: JSON.stringify({
       inline_keyboard: [
@@ -108,26 +108,26 @@ bot.onText(/\/start/, (msg) => {
       ]
     })
   };
-  bot.sendMessage(msg.chat.id, 'Привiт! Я бот, котрий допоможе тобi долучитися до вирiшення проблем переробки смiття!', options);
+  bot.sendMessage(chatId, 'Привiт! Я бот, котрий допоможе тобi долучитися до вирiшення проблем переробки смiття!', options);
 });
 
-bot.onText(/\/find/, (msg) => { chooseCategory(msg.chat.id); });
+bot.onText(/\/find/, (msg) => { chooseCategory(msg.from.id); });
 
 bot.on('callback_query', function (msg) {
-  if(msg.data === '1') { chooseCategory(msg.message.chat.id); } 
-  if(msg.data === '2') { chooseCategory(msg.message.chat.id); }
+  if(msg.data === '1') { chooseCategory(msg.from.id); } 
+  if(msg.data === '2') { chooseCategory(msg.from.id); }
   if(msg.data === '3') { 
-    bot.sendMessage(msg.message.chat.id, 'Щоб додати пункт прийому вторинної сировини, заповни цю форму: bit.ly/2NPuvpT');  
+    bot.sendMessage(msg.from.id, 'Щоб додати пункт прийому вторинної сировини, заповни цю форму: bit.ly/2NPuvpT');  
   } 
   if(msg.data === '4') { 
-    bot.sendMessage(msg.message.chat.id, 'Ти можеш на написати нам пошту team.motiwaste@gmail.com або у телеграмі @yehorkuzmin');
+    bot.sendMessage(msg.from.id, 'Ти можеш на написати нам пошту team.motiwaste@gmail.com або у телеграмі @yehorkuzmin');
   } else {
     for(let i = 0; i < categoryArrNetwork.length; i++) {
       if(msg.data == categoryArrNetwork[i]._id){
         let added = false;
         if(typeof users !== 'undefined' && users.length > 0){
           for(let j = 0; j<users.length; j++) {
-            if(users[j].chatId == msg.message.chat.id){
+            if(users[j].chatId == msg.from.id){
               users[j].categoryId = categoryArrNetwork[i]._id;
               added = true;
             }
@@ -135,12 +135,12 @@ bot.on('callback_query', function (msg) {
         }
 
         if(!added) {
-          users.push(new User(msg.message.chat.id, msg.data))
+          users.push(new User(msg.from.id, msg.data))
           added = true;
         }
 
-        bot.sendMessage(msg.message.chat.id, categoryArrNetwork[i].description);
-        bot.sendMessage(msg.message.chat.id, "Вiдправ менi, будь-ласка, свою геолокацiю")
+        bot.sendMessage(msg.from.id, categoryArrNetwork[i].description);
+        bot.sendMessage(msg.from.id, "Вiдправ менi, будь-ласка, свою геолокацiю")
       }
     }
   }
@@ -154,8 +154,8 @@ class User {
 }
 
 bot.on('photo', (msg) => {
-  const chatId = msg.chat.id;
-  bot.sendMessage(chatId, 'Дякую за твiй QR-code');
+  const chatId = msg.from.id;
+  bot.sendMessage(chatId, 'Дякую за твое фото');
 });
 
 // Listen for any kind of message. There are different kinds of
