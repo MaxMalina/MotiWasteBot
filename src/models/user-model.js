@@ -7,7 +7,8 @@ var UserSchema = new Schema({
     username : String,
     number : String,
     firstName : String,
-    lastName : String
+    lastName : String,
+    lastActivity : Date
 });
 
 var User = mongoose.model('user', UserSchema);
