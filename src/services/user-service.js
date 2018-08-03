@@ -11,6 +11,16 @@ var UserService = {
         })
     },
 
+    getById: function (telegramId, callback) {
+        UserModel.findOne({_id: telegramId}, function (err, user) {
+            if (err) {
+                callback(err, null);
+            } else {
+                callback(null, user);
+            }
+        })
+    },
+
     isNew: function (telegramId, callback) {
         UserModel.findOne({_id: telegramId}, function (err, existingUser) {
             if (err) {
@@ -31,25 +41,23 @@ var UserService = {
                 callback(err, null);
                 return;
             }
-            if (result) {
-                var newUserDto = new UserModel({
-                    _id: userInfo.telegramId,
-                    username: userInfo.username,
-                    fistName: userInfo.firstName,
-                    lastName: userInfo.lastName,
-                    lastActivity: new Date()
-                });
 
-                newUserDto.save(function (err) {
-                    if (err) {
-                        callback(err, null);
-                    } else {
-                        callback(null, true);
-                    }
-                });
-            }else{
-                callback(null, false);
-            }
+            var newUserDto = new UserModel({
+                _id: userInfo.telegramId,
+                username: userInfo.username,
+                fistName: userInfo.firstName,
+                lastName: userInfo.lastName,
+                lastActivity: new Date()
+            });
+
+            newUserDto.save(function (err) {
+                if (err) {
+                    callback(err, null);
+                } else {
+                    callback(null, true);
+                }
+            });
+            
         })
     }
 };

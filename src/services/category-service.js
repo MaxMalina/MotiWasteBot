@@ -12,11 +12,11 @@ var CategoryService = {
     },
 
     getById : function (id, callback) {
-        CategoryModel.find({_id : id}, function (err, categories) {
+        CategoryModel.findOne({_id : id}, function (err, category) {
             if (err) {
                 callback(err, null);
             } else {
-                callback(null, categories);
+                callback(null, category);
             }
         });
     },
