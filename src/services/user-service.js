@@ -21,6 +21,18 @@ var UserService = {
         })
     },
 
+    updateLastActivity: function (telegramId, callback) {
+        UserModel.findOne({_id: telegramId}, function (err, user) {
+            if (err) {
+                callback(err, null);
+            } else {
+                user.lastActivity = new Date();
+                user.save();
+                callback(null, true);
+            }
+        })
+    },
+
     isNew: function (telegramId, callback) {
         UserModel.findOne({_id: telegramId}, function (err, existingUser) {
             if (err) {
@@ -41,23 +53,26 @@ var UserService = {
                 callback(err, null);
                 return;
             }
+            if (result) {
+                var newUserDto = new UserModel({
+                    _id: userInfo.telegramId,
+                    username: userInfo.username,
+                    fistName: userInfo.firstName,
+                    lastName: userInfo.lastName,
+                    lastActivity: new Date()
+                });
 
-            var newUserDto = new UserModel({
-                _id: userInfo.telegramId,
-                username: userInfo.username,
-                fistName: userInfo.firstName,
-                lastName: userInfo.lastName,
-                lastActivity: new Date()
-            });
-
-            newUserDto.save(function (err) {
-                if (err) {
-                    callback(err, null);
-                } else {
-                    callback(null, true);
-                }
-            });
-            
+                newUserDto.save(function (err) {
+                    if (err) {
+                        callback(err, null);
+                    } else {
+                        callback(null, true);
+                    }
+                });
+            }else{
+                updateLastActivity(userInfo.telegramId, null);
+                callback(null, false);
+            }
         })
     }
 };
