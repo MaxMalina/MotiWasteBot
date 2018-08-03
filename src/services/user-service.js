@@ -35,7 +35,6 @@ var UserService = {
                 var newUserDto = new UserModel({
                     _id: userInfo.telegramId,
                     username: userInfo.username,
-                    number: userInfo.number,
                     fistName: userInfo.firstName,
                     lastName: userInfo.lastName,
                     lastActivity: new Date()
