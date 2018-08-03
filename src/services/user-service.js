@@ -41,7 +41,6 @@ var UserService = {
                     lastActivity: new Date()
                 });
 
-                Logger.notify('Trying to save new user ');
                 newUserDto.save(function (err) {
                     if (err) {
                         callback(err, null);
