@@ -1,10 +1,10 @@
 {
     "production": {
-      "telegramToken": "",
-      "connectionString": ""
+      "telegramToken": "580175305:AAFpPnRk_jw7l043BFJEaNsCt7pA4-9N5yw",
+      "connectionString": "mongodb://team.motiwaste:recycliki_Vpered228@ds111012.mlab.com:11012/motiwaste_bot"
     },
     "development": {
-      "telegramToken": "",
-      "connectionString": ""
+      "telegramToken": "672806907:AAHb4qa0mtvcjL_CTZT-_U9K7SA5VppUYn0",
+      "connectionString": "mongodb://team.motiwaste:recycliki_Vpered228@ds111012.mlab.com:11012/motiwaste_bot"
     }
   }
