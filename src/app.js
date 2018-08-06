@@ -7,6 +7,7 @@ const StartHandler = require('./handlers/start-handler');
 const LocationService = require('./services/location-service');
 const CategoryService = require('./services/category-service');
 
+const BotUtils = require('./utils/bot-utils');
 const ConfigBuilder = require('./utils/config-builder');
 const config = ConfigBuilder.build('development');
 
@@ -207,10 +208,7 @@ function chooseCategory(chatId) {
   for (let i = 0; i < categoryArrNetwork.length; i++) {
     result.push([{ text: categoryArrNetwork[i].name, callback_data: categoryArrNetwork[i]._id }]);
   }
-  var options = {
-    reply_markup: JSON.stringify({
-      inline_keyboard: result
-    })
-  };
+  
+  var options = BotUtils.buildMessageOptions(result);
   bot.sendMessage(chatId, 'Який тип смiття хочеш здати?', options);
 }
