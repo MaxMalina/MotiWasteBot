@@ -1,16 +1,17 @@
 const request = require('request');
-var StartHandler = require('./handlers/start-handler');
-var mongoose = require('mongoose');
-
+const mongoose = require('mongoose');
 const TelegramBot = require('node-telegram-bot-api');
 
-var ConfigBuilder = require('./utils/config-builder');
-var config = ConfigBuilder.build('development');
+const StartHandler = require('./handlers/start-handler');
+
+const LocationService = require('./services/location-service');
+const CategoryService = require('./services/category-service');
+
+const ConfigBuilder = require('./utils/config-builder');
+const config = ConfigBuilder.build('development');
 
 const token = config.telegramToken;
 mongoose.connect(config.connectionString, { useMongoClient: true });
-
-var LocationService = require('./services/location-service');
 
 LocationService.getAll(function (err, locations) {
   if (err) {
@@ -30,7 +31,6 @@ LocationService.getByCategories("pet", function (err, locations) {
 
 
 var categoryArrNetwork = [];
-var CategoryService = require('./services/category-service');
 CategoryService.getAll(function (err, categories) {
   if (err) {
     console.log(err.message)
