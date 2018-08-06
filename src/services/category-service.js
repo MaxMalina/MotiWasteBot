@@ -22,7 +22,7 @@ var CategoryService = {
     },
 
     getByType : function (type, callback) {
-        CategoryModel.find({type : type}, function (err, categories) {
+        CategoryModel.findOne({type : type}, function (err, categories) {
             if (err) {
                 callback(err, null);
             } else {
@@ -32,7 +32,7 @@ var CategoryService = {
     },
 
     getByName : function (name, callback) {
-        CategoryModel.find({name : name}, function (err, categories) {
+        CategoryModel.findOne({name : name}, function (err, categories) {
             if (err) {
                 callback(err, null);
             } else {

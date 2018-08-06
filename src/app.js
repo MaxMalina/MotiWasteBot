@@ -91,9 +91,27 @@ bot.on('location', (msg) => {
       }
     }
 
-    bot.sendMessage(chatId, fullInfoNetwork[minIndex].name + '\n' + fullInfoNetwork[minIndex].address + '\n' + fullInfoNetwork[minIndex].workingHours + '\n*' + fullInfoNetwork[minIndex].categories + '*', {parse_mode: 'Markdown'});
+    //TODO : extract to Method
+    var categoriesInLocation = [];
+    for(let i = 0; i < fullInfoNetwork[minIndex].categories.length; i++) {
+      for(let j = 0; j < categoryArrNetwork.length; j++) {
+        if(categoryArrNetwork[j].type == fullInfoNetwork[minIndex].categories[i]) {
+          categoriesInLocation.push(categoryArrNetwork[j].name)
+        }
+      }
+    }
+
+    var strMessage = fullInfoNetwork[minIndex].name + '\n' + 
+                    fullInfoNetwork[minIndex].address + '\n' + 
+                    fullInfoNetwork[minIndex].workingHours + '\n\n*';
+    
+    categoriesInLocation.forEach(categoryName => {
+      strMessage += categoryName + '\n'
+    })
+    strMessage += '*' + '\n' + Math.round(minDistance) + ' метрiв';
+
+    bot.sendMessage(chatId, strMessage, {parse_mode: 'Markdown'});
     bot.sendLocation(chatId, nearestPoint.latitude, nearestPoint.longitude);
-    bot.sendMessage(chatId, Math.round(minDistance) + ' метрiв');
 });
 
 bot.onText(/\/start/, (msg) => {
