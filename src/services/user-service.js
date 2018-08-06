@@ -28,9 +28,9 @@ var UserService = {
             } else {
                 user.lastActivity = new Date();
                 user.save();
-                callback(null, true);
+                //callback(null, true);
             }
-        })
+        });
     },
 
     isNew: function (telegramId, callback) {
@@ -57,7 +57,7 @@ var UserService = {
                 var newUserDto = new UserModel({
                     _id: userInfo.telegramId,
                     username: userInfo.username,
-                    fistName: userInfo.firstName,
+                    firstName: userInfo.firstName,
                     lastName: userInfo.lastName,
                     lastActivity: new Date()
                 });
@@ -70,7 +70,7 @@ var UserService = {
                     }
                 });
             }else{
-                updateLastActivity(userInfo.telegramId, null);
+                UserService.updateLastActivity(userInfo.telegramId, {});
                 callback(null, false);
             }
         })

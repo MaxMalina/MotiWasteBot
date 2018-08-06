@@ -1,4 +1,5 @@
 const request = require('request');
+var StartHandler = require('./handlers/start-handler');
 var mongoose = require('mongoose');
 
 const TelegramBot = require('node-telegram-bot-api');
@@ -114,20 +115,8 @@ bot.on('location', (msg) => {
     bot.sendLocation(chatId, nearestPoint.latitude, nearestPoint.longitude);
 });
 
-bot.onText(/\/start/, (msg) => {
-  const chatId = msg.from.id;
-  var options = {
-    reply_markup: JSON.stringify({
-      inline_keyboard: [
-        [{ text: 'Найближчий пункт прийому вторсировини', callback_data: '1' }],
-        [{ text: 'Як підготувати сміття до утилізації', callback_data: '2' }],
-        [{ text: 'Додати пункт прийому вторсировини', callback_data: '3' }],
-        [{ text: 'Допомогти проекту', callback_data: '4' }]
-      ]
-    })
-  };
-  bot.sendMessage(chatId, 'Привiт! Я бот, котрий допоможе тобi долучитися до вирiшення проблем переробки смiття!', options);
-});
+
+StartHandler.register(bot);
 
 bot.onText(/\/find/, (msg) => { chooseCategory(msg.from.id); });
 
