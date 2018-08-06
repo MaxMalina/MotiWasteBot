@@ -6,6 +6,16 @@ var BotUtils = {
             lastName: message.from.last_name,
             telegramId:  message.hasOwnProperty('chat') ? message.chat.id : message.from.id
         };
+    },
+
+    buildMessageOptions: function (buttons) {
+        return {
+            parse_mode: "HTML",
+            disable_web_page_preview: false,
+            reply_markup : JSON.stringify({
+                inline_keyboard: buttons
+            })
+        }
     }
 }
 
