@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const TelegramBot = require('node-telegram-bot-api');
 
 const StartHandler = require('./handlers/start-handler');
+const SecretHandler = require('./handlers/secret-handler');
 
 const LocationService = require('./services/location-service');
 const CategoryService = require('./services/category-service');
@@ -118,6 +119,7 @@ bot.on('location', (msg) => {
 
 
 StartHandler.register(bot);
+SecretHandler.register(bot);
 
 bot.onText(/\/find/, (msg) => { chooseCategory(msg.from.id); });
 
@@ -208,7 +210,7 @@ function chooseCategory(chatId) {
   for (let i = 0; i < categoryArrNetwork.length; i++) {
     result.push([{ text: categoryArrNetwork[i].name, callback_data: categoryArrNetwork[i]._id }]);
   }
-  
+
   var options = BotUtils.buildMessageOptions(result);
   bot.sendMessage(chatId, 'Який тип смiття хочеш здати?', options);
 }

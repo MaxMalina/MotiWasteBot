@@ -8,6 +8,10 @@ var BotUtils = {
         };
     },
 
+    getLastMessageText: function (message) {
+        return message.text;
+    },
+
     buildMessageOptions: function (buttons) {
         return {
             parse_mode: "HTML",
