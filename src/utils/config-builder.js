@@ -2,7 +2,7 @@ var fs = require('fs');
 
 var ConfigBuilder = {
     build : function () {
-        var configJson = JSON.parse(fs.readFileSync('../config.json', 'utf8'));
+        var configJson = JSON.parse(fs.readFileSync('./src/config.json', 'utf8'));
 
         if(process.env.NODE_ENV === 'production') {
             return configJson.production;
