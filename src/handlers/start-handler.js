@@ -1,5 +1,6 @@
 var BotUtils = require('../utils/bot-utils');
 var UserService = require('../services/user-service');
+const text = require('../utils/bot-text');
 
 var StartHandler = {
     register: function (bot) {
@@ -18,14 +19,14 @@ var StartHandler = {
             });
 
             var buttons = [
-                [{ text: 'Найближчий пункт прийому вторсировини', callback_data: '1' }],
-                [{ text: 'Як підготувати сміття до утилізації', callback_data: '2' }],
-                [{ text: 'Додати пункт прийому вторсировини', callback_data: '3' }],
-                [{ text: 'Допомогти проекту', callback_data: '4' }]
+                [{ text: text.buttons.mainMenu.nearestAddress, callback_data: '1' }],
+                [{ text: text.buttons.mainMenu.howToPrepareWaste, callback_data: '2' }],
+                [{ text: text.buttons.mainMenu.addAddress, callback_data: '3' }],
+                [{ text: text.buttons.mainMenu.helpProject, callback_data: '4' }]
             ];
 
             var options = BotUtils.buildMessageOptions(buttons);
-            bot.sendMessage(clientInfo.telegramId, 'Привiт! Я бот, котрий допоможе тобi долучитися до вирiшення проблем переробки смiття!', options);          
+            bot.sendMessage(clientInfo.telegramId, text.info.mainMenu, options);          
         });
     }
 };

@@ -10,6 +10,7 @@ const CategoryService = require('./services/category-service');
 
 const BotUtils = require('./utils/bot-utils');
 const ConfigBuilder = require('./utils/config-builder');
+const text = require('../utils/bot-text');
 const config = ConfigBuilder.build('development');
 
 const token = config.telegramToken;
@@ -111,7 +112,7 @@ bot.on('location', (msg) => {
     categoriesInLocation.forEach(categoryName => {
       strMessage += categoryName + '\n'
     })
-    strMessage += '*' + '\n' + Math.round(minDistance) + ' метрiв';
+    strMessage += '*' + '\n' + Math.round(minDistance) + text.messages.meters;
 
     bot.sendMessage(chatId, strMessage, {parse_mode: 'Markdown'});
     bot.sendLocation(chatId, nearestPoint.latitude, nearestPoint.longitude);
@@ -127,10 +128,10 @@ bot.on('callback_query', function (msg) {
   if(msg.data === '1') { chooseCategory(msg.from.id); } 
   if(msg.data === '2') { chooseCategory(msg.from.id); }
   if(msg.data === '3') { 
-    bot.sendMessage(msg.from.id, 'Щоб додати пункт прийому вторинної сировини, заповни цю форму: bit.ly/2NPuvpT');  
+    bot.sendMessage(msg.from.id, text.info.addAddresInfo);  
   } 
   if(msg.data === '4') { 
-    bot.sendMessage(msg.from.id, 'Ти можеш на написати нам пошту team.motiwaste@gmail.com або у телеграмі @yehorkuzmin');
+    bot.sendMessage(msg.from.id, text.info.contacts);
   } else {
     for(let i = 0; i < categoryArrNetwork.length; i++) {
       if(msg.data == categoryArrNetwork[i]._id){
@@ -150,7 +151,7 @@ bot.on('callback_query', function (msg) {
         }
 
         bot.sendMessage(msg.from.id, categoryArrNetwork[i].description);
-        bot.sendMessage(msg.from.id, "Вiдправ менi, будь-ласка, свою геолокацiю")
+        bot.sendMessage(msg.from.id, text.messages.geolocationRequest)
       }
     }
   }
@@ -165,7 +166,7 @@ class User {
 
 bot.on('photo', (msg) => {
   const chatId = msg.from.id;
-  bot.sendMessage(chatId, 'Дякую за твое фото');
+  bot.sendMessage(chatId, text.messages.thanksForPhoto);
 });
 
 // Listen for any kind of message. There are different kinds of
@@ -212,5 +213,5 @@ function chooseCategory(chatId) {
   }
 
   var options = BotUtils.buildMessageOptions(result);
-  bot.sendMessage(chatId, 'Який тип смiття хочеш здати?', options);
+  bot.sendMessage(chatId, text.messages.wasteType, options);
 }
