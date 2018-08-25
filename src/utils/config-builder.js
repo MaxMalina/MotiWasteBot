@@ -1,10 +1,10 @@
 var fs = require('fs');
 
 var ConfigBuilder = {
-    build : function () {
+    build : function (env) {
         var configJson = JSON.parse(fs.readFileSync('./src/config.json', 'utf8'));
 
-        if(process.env.NODE_ENV === 'production') {
+        if(env === 'production') {
             return configJson.production;
         } else {
             return configJson.development;
