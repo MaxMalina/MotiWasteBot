@@ -10,7 +10,7 @@ const CategoryService = require('./services/category-service');
 
 const BotUtils = require('./utils/bot-utils');
 const ConfigBuilder = require('./utils/config-builder');
-const text = require('../utils/bot-text');
+const text = require('./utils/bot-text');
 const config = ConfigBuilder.build('development');
 
 const token = config.telegramToken;
