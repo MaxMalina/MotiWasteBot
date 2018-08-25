@@ -26,7 +26,7 @@ var StartHandler = {
             ];
 
             var options = BotUtils.buildMessageOptions(buttons);
-            bot.sendMessage(clientInfo.telegramId, text.info.mainMenu, options);          
+            bot.sendMessage(clientInfo.telegramId, text.info.bot, options);          
         });
     }
 };
