@@ -20,7 +20,7 @@ var StartHandler = {
 
             var buttons = [
                 [{ text: text.buttons.mainMenu.nearestAddress, callback_data: '1' }],
-                [{ text: text.buttons.mainMenu.howToPrepareWaste, callback_data: '2' }],
+                //[{ text: text.buttons.mainMenu.howToPrepareWaste, callback_data: '2' }],
                 [{ text: text.buttons.mainMenu.addAddress, callback_data: '3' }],
                 [{ text: text.buttons.mainMenu.helpProject, callback_data: '4' }]
             ];
