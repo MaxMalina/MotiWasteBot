@@ -8,15 +8,16 @@ const text = {
         }
     },
     info: {
-        bot: "Привiт! Я бот, котрий допоможе тобi долучитися до вирiшення проблем переробки смiття!",
-        addAddresInfo: "Щоб додати пункт прийому вторинної сировини, заповни цю форму: bit.ly/2NPuvpT",
+        bot: "Чим можу бути корисним?",
+        addAddresInfo: "Респект! Заповни цю невеличку анкету і ми додамо пункт до карти. bit.ly/2NPuvpT",
         contacts: "Ти можеш на написати нам пошту team.motiwaste@gmail.com або у телеграмі @yehorkuzmin",
     },
     messages: {
+        locationFinded: "Ось що знайшов поблизу:\n\n",
         meters: "метрiв",
-        geolocationRequest: "Вiдправ менi, будь-ласка, свою геолокацiю",
+        geolocationRequest: "Де ти зараз є? Відправ мені геолокацію.",
         thanksForPhoto: "Дякую за твое фото",
-        wasteType: "Який тип смiття хочеш здати?"
+        wasteType: "Що здаємо на переробку?"
     }
 }
 

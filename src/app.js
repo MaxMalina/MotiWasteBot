@@ -16,23 +16,6 @@ const config = ConfigBuilder.build('production');
 const token = config.telegramToken;
 mongoose.connect(config.connectionString, { useMongoClient: true });
 
-LocationService.getAll(function (err, locations) {
-  if (err) {
-    console.log(err.message)
-  }
-
-  console.log(locations);
-});
-
-LocationService.getByCategories("pet", function (err, locations) {
-  if (err) {
-    console.log(err.message)
-  }
-
-  console.log(locations);
-});
-
-
 var categoryArrNetwork = [];
 CategoryService.getAll(function (err, categories) {
   if (err) {
@@ -105,14 +88,16 @@ bot.on('location', (msg) => {
       }
     }
 
-    var strMessage = fullInfoNetwork[minIndex].name + '\n' + 
+    var strMessage = text.messages.locationFinded;
+
+    strMessage += fullInfoNetwork[minIndex].name + '\n' + 
                     fullInfoNetwork[minIndex].address + '\n' + 
                     fullInfoNetwork[minIndex].workingHours + '\n\n*';
     
     categoriesInLocation.forEach(categoryName => {
       strMessage += categoryName + '\n'
     })
-    strMessage += '*' + '\n' + Math.round(minDistance) + text.messages.meters;
+    strMessage += '*' + '\n' + Math.round(minDistance) + ' ' + text.messages.meters;
 
     bot.sendMessage(chatId, strMessage, {parse_mode: 'Markdown'});
     bot.sendLocation(chatId, nearestPoint.latitude, nearestPoint.longitude);
@@ -125,33 +110,94 @@ SecretHandler.register(bot);
 bot.onText(/\/find/, (msg) => { chooseCategory(msg.from.id); });
 
 bot.on('callback_query', function (msg) {
-  if(msg.data === '1') { chooseCategory(msg.from.id); } 
-  if(msg.data === '2') { chooseCategory(msg.from.id); }
+  if(msg.data === '1') {
+    let result = [];
+    for (let i = 0; i < categoryArrNetwork.length; i++) {
+      result.push([{ text: categoryArrNetwork[i].name, callback_data: '888' + categoryArrNetwork[i]._id }]);
+    }
+
+    var options = BotUtils.buildMessageOptions(result);
+    bot.sendMessage(msg.from.id, text.messages.wasteType, options);
+  } 
+  if(msg.data === '2') {
+    let result = [];
+    for (let i = 0; i < categoryArrNetwork.length; i++) {
+      result.push([{ text: categoryArrNetwork[i].name, callback_data: '999' + categoryArrNetwork[i]._id }]);
+    }
+
+    var options = BotUtils.buildMessageOptions(result);
+    bot.sendMessage(msg.from.id, text.messages.wasteType, options);
+  }
   if(msg.data === '3') { 
     bot.sendMessage(msg.from.id, text.info.addAddresInfo);  
   } 
   if(msg.data === '4') { 
     bot.sendMessage(msg.from.id, text.info.contacts);
   } else {
-    for(let i = 0; i < categoryArrNetwork.length; i++) {
-      if(msg.data == categoryArrNetwork[i]._id){
-        let added = false;
-        if(typeof users !== 'undefined' && users.length > 0){
-          for(let j = 0; j<users.length; j++) {
-            if(users[j].chatId == msg.from.id){
-              users[j].categoryId = categoryArrNetwork[i]._id;
-              added = true;
+    if(msg.data.startsWith('888') == true) {
+
+      msg.data = msg.data.substr(3);
+      var options = BotUtils.buildMessageOptions([
+        [{ text: 'Так', callback_data: '999' + msg.data }],
+        [{ text: 'Ні, вже знаю', callback_data: msg.data }],
+      ]);
+      bot.sendMessage(msg.from.id, 'Розказати, як підготувати його до здачі?', options);
+
+    } else if(msg.data.startsWith('999') == true){
+      msg.data = msg.data.substr(3);
+      for(let i = 0; i < categoryArrNetwork.length; i++) {
+        if(msg.data == categoryArrNetwork[i]._id){
+          let added = false;
+          if(typeof users !== 'undefined' && users.length > 0){
+            for(let j = 0; j<users.length; j++) {
+              if(users[j].chatId == msg.from.id){
+                users[j].categoryId = categoryArrNetwork[i]._id;
+                added = true;
+              }
             }
           }
-        }
 
-        if(!added) {
-          users.push(new User(msg.from.id, msg.data))
-          added = true;
-        }
+          if(!added) {
+            users.push(new User(msg.from.id, msg.data))
+            added = true;
+          }
 
-        bot.sendMessage(msg.from.id, categoryArrNetwork[i].description);
-        bot.sendMessage(msg.from.id, text.messages.geolocationRequest)
+          var strDo = '';
+          for(let j = 0; j<categoryArrNetwork[i].do.length; j++){
+            strDo += '✅ ' +  categoryArrNetwork[i].do[j] + '\n';
+          }
+
+          var strDont = '';
+          for(let j = 0; j<categoryArrNetwork[i].dont.length; j++){
+            strDont += '❌ ' +  categoryArrNetwork[i].dont[j] + '\n';
+          }
+
+          var options = BotUtils.buildMessageOptions([[{ text: 'Хочу здати', callback_data: msg.data }]]);
+
+          bot.sendMessage(msg.from.id, categoryArrNetwork[i].description + '\n\n' + strDo + '\n\n' + strDont, options);
+        }
+      }
+          
+    } else {
+      for(let i = 0; i < categoryArrNetwork.length; i++) {
+        if(msg.data == categoryArrNetwork[i]._id){
+          let added = false;
+          if(typeof users !== 'undefined' && users.length > 0){
+            for(let j = 0; j<users.length; j++) {
+              if(users[j].chatId == msg.from.id){
+                users[j].categoryId = categoryArrNetwork[i]._id;
+                added = true;
+              }
+            }
+          }
+
+          if(!added) {
+            users.push(new User(msg.from.id, msg.data))
+            added = true;
+          }
+
+          bot.sendMessage(msg.from.id, text.messages.geolocationRequest);
+        }
       }
     }
   }
