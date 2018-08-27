@@ -34,11 +34,21 @@ const bot = new TelegramBot(token, {polling: true});
 //  categoryArrNetwork = body;
 //});
 
-var fullInfoNetwork;
-request('https://recyclemap.org/api/places', { json: true }, (err, res, body) => {
-  if (err) { return console.log(err); }
-  fullInfoNetwork = body;
+var fullInfoNetwork = [];
+LocationService.getAll(function (err, locations) {
+  if (err) {
+    console.log(err.message)
+  }
+
+  locations.forEach(element => {
+    fullInfoNetwork.push(element._doc);
+  })
 });
+
+//request('https://recyclemap.org/api/places', { json: true }, (err, res, body) => {
+//  if (err) { return console.log(err); }
+//  fullInfoNetwork = body;
+//});
 
 var users = [];
 
@@ -63,7 +73,7 @@ bot.on('location', (msg) => {
     var points = []
     for(let i = 0; i < fullInfoNetwork.length; i++){
       var jsonContent = fullInfoNetwork[i];
-      points.push(new Location(jsonContent.loc.coordinates[1], jsonContent.loc.coordinates[0]))
+      points.push(new Location(jsonContent.coordinates[1], jsonContent.coordinates[0]))
     }
 
     let minIndex = 0;
