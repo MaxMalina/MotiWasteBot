@@ -1,4 +1,3 @@
-const request = require('request');
 const mongoose = require('mongoose');
 const TelegramBot = require('node-telegram-bot-api');
 
@@ -14,7 +13,7 @@ const text = require('./utils/bot-text');
 const config = ConfigBuilder.build('production');
 
 const token = config.telegramToken;
-mongoose.connect(config.connectionString, { useMongoClient: true });
+mongoose.connect(config.connectionString);
 
 var categoryArrNetwork = [];
 CategoryService.getAll(function (err, categories) {
@@ -24,6 +23,12 @@ CategoryService.getAll(function (err, categories) {
   
   categories.forEach(element => {
     categoryArrNetwork.push(element._doc);
+  });
+
+  categoryArrNetwork.sort(function(a, b) {
+    if(a.name < b.name) return -1;
+    if(a.name > b.name) return 1;
+    return 0;
   });
 });
 
@@ -172,6 +177,11 @@ bot.on('callback_query', function (msg) {
             added = true;
           }
 
+          var strDescription = '';
+          if(typeof categoryArrNetwork[i].description !== 'undefined'){
+            strDescription = categoryArrNetwork[i].description;
+          }
+
           var strDo = '';
           for(let j = 0; j<categoryArrNetwork[i].do.length; j++){
             strDo += '✅ ' +  categoryArrNetwork[i].do[j] + '\n';
@@ -182,9 +192,14 @@ bot.on('callback_query', function (msg) {
             strDont += '❌ ' +  categoryArrNetwork[i].dont[j] + '\n';
           }
 
+          var strSteps = '';
+          for(let j = 0; j<categoryArrNetwork[i].steps.length; j++){
+            strDont += 'ℹ ' +  categoryArrNetwork[i].steps[j] + '\n';
+          }
+
           var options = BotUtils.buildMessageOptions([[{ text: 'Хочу здати', callback_data: msg.data }]]);
 
-          bot.sendMessage(msg.from.id, categoryArrNetwork[i].description + '\n\n' + strDo + '\n\n' + strDont, options);
+          bot.sendMessage(msg.from.id, strDescription + '\n\n' + strDo + '\n\n' + strDont + '\n\n' + strSteps, options);
         }
       }
           
