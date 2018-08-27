@@ -22,28 +22,37 @@ var BotUtils = {
         }
     },
 
+    //maybe it should not be there
     buildCategoryInfo : function(category) {
         var strDescription = '';
         if(typeof category.description !== 'undefined') {
-          strDescription = category.description;
+          strDescription = category.description + '\n\n';
         }
       
         var strDo = '';
-        for(let j = 0; j<category.do.length; j++){
-          strDo += '✅ ' +  category.do[j] + '\n';
+        if(typeof category.do !== 'undefined')  {
+            for(let j = 0; j<category.do.length; j++) {
+                strDo += '✅ ' +  category.do[j] + '\n';
+            }
+            strDo += '\n\n';
         }
       
         var strDont = '';
-        for(let j = 0; j<category.dont.length; j++){
-          strDont += '❌ ' +  category.dont[j] + '\n';
+        if(typeof category.dont !== 'undefined')  {
+            for(let j = 0; j<category.dont.length; j++) {
+                strDont += '❌ ' +  category.dont[j] + '\n';
+            }
+            strDont += '\n\n';
         }
       
         var strSteps = '';
-        for(let j = 0; j<category.steps.length; j++){
-          strSteps += 'ℹ ' +  category.steps[j] + '\n';
+        if(typeof category.steps !== 'undefined')  {
+            for(let j = 0; j<category.steps.length; j++) {
+                strSteps += 'ℹ ' +  category.steps[j] + '\n';
+            }
         }
       
-        return strDescription + '\n\n' + strDo + '\n\n' + strDont + '\n\n' + strSteps;
+        return strDescription + strDo + strDont + strSteps;
     }
 }
 
