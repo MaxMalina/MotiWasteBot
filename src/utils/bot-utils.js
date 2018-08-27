@@ -20,6 +20,30 @@ var BotUtils = {
                 inline_keyboard: buttons
             })
         }
+    },
+
+    buildCategoryInfo : function(category) {
+        var strDescription = '';
+        if(typeof category.description !== 'undefined') {
+          strDescription = category.description;
+        }
+      
+        var strDo = '';
+        for(let j = 0; j<category.do.length; j++){
+          strDo += '✅ ' +  category.do[j] + '\n';
+        }
+      
+        var strDont = '';
+        for(let j = 0; j<category.dont.length; j++){
+          strDont += '❌ ' +  category.dont[j] + '\n';
+        }
+      
+        var strSteps = '';
+        for(let j = 0; j<category.steps.length; j++){
+          strSteps += 'ℹ ' +  category.steps[j] + '\n';
+        }
+      
+        return strDescription + '\n\n' + strDo + '\n\n' + strDont + '\n\n' + strSteps;
     }
 }
 

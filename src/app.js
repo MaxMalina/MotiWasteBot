@@ -177,29 +177,9 @@ bot.on('callback_query', function (msg) {
             added = true;
           }
 
-          var strDescription = '';
-          if(typeof categoryArrNetwork[i].description !== 'undefined'){
-            strDescription = categoryArrNetwork[i].description;
-          }
-
-          var strDo = '';
-          for(let j = 0; j<categoryArrNetwork[i].do.length; j++){
-            strDo += '✅ ' +  categoryArrNetwork[i].do[j] + '\n';
-          }
-
-          var strDont = '';
-          for(let j = 0; j<categoryArrNetwork[i].dont.length; j++){
-            strDont += '❌ ' +  categoryArrNetwork[i].dont[j] + '\n';
-          }
-
-          var strSteps = '';
-          for(let j = 0; j<categoryArrNetwork[i].steps.length; j++){
-            strDont += 'ℹ ' +  categoryArrNetwork[i].steps[j] + '\n';
-          }
-
           var options = BotUtils.buildMessageOptions([[{ text: 'Хочу здати', callback_data: msg.data }]]);
-
-          bot.sendMessage(msg.from.id, strDescription + '\n\n' + strDo + '\n\n' + strDont + '\n\n' + strSteps, options);
+          var strMessage = BotUtils.buildCategoryInfo(categoryArrNetwork[i]);
+          bot.sendMessage(msg.from.id, strMessage, options);
         }
       }
           
