@@ -1,0 +1,1 @@
+start /wait java -jar -Dfile.encoding=utf-8 recyclemap_locations_parser.jar & mongoimport -h ds111012.mlab.com:11012 -d motiwaste_bot -c locations -u team.motiwaste -p recycliki_Vpered228 --file locations.json --jsonArray
