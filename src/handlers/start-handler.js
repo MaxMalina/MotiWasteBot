@@ -4,10 +4,15 @@ const text = require('../utils/bot-text');
 
 var StartHandler = {
     register: function (bot) {
-        var clientMessage = new RegExp('\/start');
+        var clientStartMessage = new RegExp('\/start');
 
-        bot.onText(clientMessage, function (message, match) {
-            var clientInfo = BotUtils.getClientInfo(message);
+        bot.onText(clientStartMessage, function (message, match) {
+            StartHandler.mainMenu(bot, message);   
+        });
+    },
+
+    mainMenu: function(bot, message) {
+        var clientInfo = BotUtils.getClientInfo(message);
 
             console.dir(message);
 
@@ -26,8 +31,7 @@ var StartHandler = {
             ];
 
             var options = BotUtils.buildMessageOptions(buttons);
-            bot.sendMessage(clientInfo.telegramId, text.info.bot, options);          
-        });
+            bot.sendMessage(clientInfo.telegramId, text.info.bot, options);
     }
 };
 

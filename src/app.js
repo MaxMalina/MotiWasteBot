@@ -114,7 +114,8 @@ bot.on('location', (msg) => {
     })
     strMessage += '*' + '\n' + Math.round(minDistance) + ' ' + text.messages.meters;
 
-    bot.sendMessage(chatId, strMessage, {parse_mode: 'Markdown'});
+    var options = BotUtils.buildMessageOptions([[{ text: 'До головного меню', callback_data: '/start' }]]);
+    bot.sendMessage(chatId, strMessage, options);
     bot.sendLocation(chatId, nearestPoint.latitude, nearestPoint.longitude);
 });
 
@@ -125,6 +126,10 @@ SecretHandler.register(bot);
 bot.onText(/\/find/, (msg) => { chooseCategory(msg.from.id); });
 
 bot.on('callback_query', function (msg) {
+  if(msg.data == '/start') {
+    StartHandler.mainMenu(bot, msg);
+  }
+
   if(msg.data === '1') {
     let result = [];
     for (let i = 0; i < categoryArrNetwork.length; i++) {

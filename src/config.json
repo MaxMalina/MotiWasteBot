@@ -4,7 +4,7 @@
       "connectionString": "mongodb://team.motiwaste:recycliki_Vpered228@ds111012.mlab.com:11012/motiwaste_bot"
     },
     "development": {
-      "telegramToken": "672806907:AAHb4qa0mtvcjL_CTZT-_U9K7SA5VppUYn0",
+      "telegramToken": "364267820:AAE3j1350hkvSwDG-KQY0cGkYsuCvPox4Kc",
       "connectionString": "mongodb://team.motiwaste:recycliki_Vpered228@ds111012.mlab.com:11012/motiwaste_bot"
     }
   }

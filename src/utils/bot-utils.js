@@ -14,7 +14,7 @@ var BotUtils = {
 
     buildMessageOptions: function (buttons) {
         return {
-            parse_mode: "HTML",
+            parse_mode: "Markdown",
             disable_web_page_preview: false,
             reply_markup : JSON.stringify({
                 inline_keyboard: buttons
