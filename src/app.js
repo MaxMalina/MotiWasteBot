@@ -5,6 +5,7 @@ const StartHandler = require('./handlers/start-handler');
 const SecretHandler = require('./handlers/secret-handler');
 const HowToHandler = require('./handlers/howto-handler');
 const AddHandler = require('./handlers/add-handler');
+const HelpHandler = require('./handlers/help-handler');
 
 const LocationService = require('./services/location-service');
 const CategoryService = require('./services/category-service');
@@ -126,6 +127,7 @@ StartHandler.register(bot);
 SecretHandler.register(bot);
 HowToHandler.register(bot,categoryArrNetwork);
 AddHandler.register(bot);
+HelpHandler.register(bot);
 
 bot.onText(/\/find/, (msg) => { chooseCategory(msg.from.id); });
 
@@ -150,7 +152,7 @@ bot.on('callback_query', function (msg) {
     AddHandler.sendAddInfo(bot,msg);  
   } 
   if(msg.data === '4') { 
-    bot.sendMessage(msg.from.id, text.info.contacts);
+    HelpHandler.sendHelpInfo(bot,msg);
   } else {
     if(msg.data.startsWith('888') == true) {
 
