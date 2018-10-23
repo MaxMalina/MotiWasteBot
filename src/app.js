@@ -3,6 +3,7 @@ const TelegramBot = require('node-telegram-bot-api');
 
 const StartHandler = require('./handlers/start-handler');
 const SecretHandler = require('./handlers/secret-handler');
+const HowToHandler = require('./handlers/howto-handler');
 
 const LocationService = require('./services/location-service');
 const CategoryService = require('./services/category-service');
@@ -122,6 +123,7 @@ bot.on('location', (msg) => {
 
 StartHandler.register(bot);
 SecretHandler.register(bot);
+HowToHandler.register(bot,categoryArrNetwork);
 
 bot.onText(/\/find/, (msg) => { chooseCategory(msg.from.id); });
 
@@ -140,13 +142,7 @@ bot.on('callback_query', function (msg) {
     bot.sendMessage(msg.from.id, text.messages.wasteType, options);
   } 
   if(msg.data === '2') {
-    let result = [];
-    for (let i = 0; i < categoryArrNetwork.length; i++) {
-      result.push([{ text: categoryArrNetwork[i].name, callback_data: '999' + categoryArrNetwork[i]._id }]);
-    }
-
-    var options = BotUtils.buildMessageOptions(result);
-    bot.sendMessage(msg.from.id, text.messages.wasteType, options);
+    HowToHandler.sendCategoriesHowTo(bot,msg,categoryArrNetwork);
   }
   if(msg.data === '3') { 
     bot.sendMessage(msg.from.id, text.info.addAddresInfo);  
