@@ -10,7 +10,7 @@ var SecretHandler = {
         bot.onText(clientMessage, function (message, match) {
             UserService.getAll(function (err, users) {
                 if (err) {
-                    bot.sendMessage(clientInfo.telegramId, 'Some error! Sorry');
+                    //bot.sendMessage(clientInfo.telegramId, 'Some error! Sorry');
                     return;
                 } else {
                     var text = BotUtils.getLastMessageText(message);

@@ -18,7 +18,7 @@ var StartHandler = {
 
             UserService.saveUser(clientInfo, function (saveErr, result) {
                 if (saveErr) {
-                    bot.sendMessage(clientInfo.telegramId, 'Some error! Sorry');
+                    //bot.sendMessage(clientInfo.telegramId, 'Some error! Sorry');
                     return;
                 }
             });
