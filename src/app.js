@@ -129,6 +129,8 @@ HowToHandler.register(bot,categoryArrNetwork);
 AddHandler.register(bot);
 HelpHandler.register(bot);
 
+bot.on("polling_error", (msg) => console.log(msg));
+
 bot.onText(/\/find/, (msg) => { chooseCategory(msg.from.id); });
 
 bot.on('callback_query', function (msg) {
